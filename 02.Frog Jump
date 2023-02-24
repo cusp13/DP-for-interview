@@ -1,0 +1,40 @@
+Geek wants to climb from the 0th stair to the (n-1)th stair. At a time the Geek can climb either one or two steps. A height[N] array is also given. Whenever the geek jumps from stair i to stair j, the energy consumed in the jump is abs(height[i]- height[j]), where abs() means the absolute difference. return the minimum energy that can be used by the Geek to jump from stair 0 to stair N-1.
+
+Example:
+Input:
+n = 4
+height = {10 20 30 10}
+Output:
+20
+Explanation:
+Geek jump from 1st to 2nd stair(|20-10| = 10 energy lost).
+Then a jump from the 2nd to the last stair(|10-20| = 10 energy lost).
+so, total energy lost is 20 which is the minimum.
+
+Approach:-As the problem statement states to find the minimum energy required, two approaches should come to our mind, greedy and dynamic programming.
+
+First, we will see why a greedy approach will not work?
+
+The total energy required by the frog depends upon the path taken by the frog. If the frog just takes the cheapest path in every stage
+it can happen that it eventually takes a costlier path after a certain number of jumps. The following example will help to understand this.
+
+Code
+
+ int func(vector<int>&h,vector<int>&dp,int n){
+      if(n==0){
+          return 0;
+      }
+      if(dp[n]!=-1){
+          return dp[n];
+      }
+      int jump2=1e9,jump1=1e9;
+        jump1 = abs(h[n]-h[n-1])+func(h,dp,n-1);
+      if(n>1)
+        jump2 = abs(h[n]-h[n-2])+func(h,dp,n-2);
+      
+      return  dp[n] = min(jump1,jump2);
+  }
+    int minimumEnergy(vector<int>& height, int n) {
+       vector<int>dp(n+1,-1);
+       return func(height,dp,n-1);
+    }
