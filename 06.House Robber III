@@ -1,0 +1,45 @@
+The thief has found himself a new place for his thievery again. There is only one entrance to this area, called root.
+
+Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that all houses in this place form a binary tree. It will automatically contact the police if two directly-linked houses were broken into on the same night.
+
+Given the root of the binary tree, return the maximum amount of money the thief can rob without alerting the police.
+
+ 
+
+Example 1:
+
+
+Input: root = [3,2,3,null,3,null,1]
+Output: 7
+Explanation: Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.
+
+Approach: this is very similar to previos house robber problem but here we have to see ajacent in binary tree.
+at each node we calculate either to include or exclude .
+make to cases either to take root or not. if not then take max of include ans exclude 
+in left and right subtree while including take include with excluded and vice-versa.
+
+//CODE
+int f(TreeNode *root){
+        unordered_map<TreeNode*,int>mp;
+        if(root==NULL){
+            return NULL;
+        }
+        if(mp.find(root)!=mp.end()){
+           return mp[root];
+        }
+        int sum=root->val;
+        if(root->left){
+           sum+=rob(root->left->left);
+           sum+=rob(root->left->right);
+        } 
+        if(root->right){
+           sum+=rob(root->right->left);
+           sum+=rob(root->right->right);
+        }
+        int sum1 = rob(root->left)+rob(root->right);
+        int ans =  max(sum,sum1);
+        return mp[root] = ans;
+}
+    int rob(TreeNode* root) {
+         return f(root);
+    }
