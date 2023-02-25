@@ -1,0 +1,50 @@
+Given an array of non-negative integers, and a value sum, determine if there is a subset of the given set with sum equal to given sum. 
+
+
+Example 1:
+
+Input:
+N = 6
+arr[] = {3, 34, 4, 12, 5, 2}
+sum = 9
+Output: 1 
+Explanation: Here there exists a subset with
+sum = 9, 4+3+2 = 9.
+Example 2:
+
+Input:
+N = 6
+arr[] = {3, 34, 4, 12, 5, 2}
+sum = 30
+Output: 0 
+Explanation: There is no subset with sum 30.
+
+
+//CODE:-
+//User function template for C++
+
+class Solution{   
+public:
+bool f(vector<int>&arr,int n,int sum,vector<vector<int>>&dp){
+    if(sum==0){
+        return 1;
+    }
+    if(n==0){
+        return sum == arr[0];
+    }
+    if(dp[n][sum]!=-1){
+        return dp[n][sum];
+    }
+    bool ans1 = f(arr,n-1,sum,dp);
+    bool ans=0;
+    if(sum>=arr[n])
+       ans = f(arr,n-1,sum-arr[n],dp);
+    return dp[n][sum] = ans|ans1;
+ 
+}
+    bool isSubsetSum(vector<int>arr, int sum){
+        int n=arr.size();
+         vector<vector<int>>dp(n+1,vector<int>(sum+1,-1));
+        return f(arr,n-1,sum,dp);
+    }
+};
