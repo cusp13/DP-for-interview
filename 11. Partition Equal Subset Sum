@@ -1,0 +1,52 @@
+Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+
+ 
+
+Example 1:
+
+Input: nums = [1,5,11,5]
+Output: true
+Explanation: The array can be partitioned as [1, 5, 5] and [11].
+
+aproach:- simple as subset equal to target here we have to divide the array into two equal path so we calculate the sum of 
+array when it is odd not possible when it even the set target = sum/2; then find for target if target is acheived then we can do partion...
+code:-
+bool f(int n,int target,vector<int>&nums,vector<vector<int>>&dp){
+       if(target==0){
+           return 1;
+       }
+       if(n==0){
+           return target==nums[0];
+       }
+       if(dp[n][target]!=-1){
+           return dp[n][target];
+       }
+       bool pick=0;
+       if(target-nums[n]>=0){
+           pick = f(n-1,target-nums[n],nums,dp);
+       }
+       bool notpick = f(n-1,target,nums,dp);
+       return dp[n][target]=pick|notpick;
+   }
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();
+        int sum = accumulate(nums.begin(),nums.end(),0);
+        if(sum%2!=0){
+            return false;
+        }
+        vector<vector<bool>>dp(n+1,vector<bool>(sum/2+1,0));
+        for(int i=0;i<n;i++) dp[i][0]=1;
+        dp[0][nums[0]]=1;
+        for(int i=1;i<n;i++){
+            for(int target=1;target<=sum/2;target++){
+                bool pick=0;
+                  if(target-nums[i]>=0){
+                      pick = dp[i-1][target-nums[i]];
+                   }
+                bool notpick = dp[i-1][target];
+                dp[i][target]=pick|notpick;
+            }
+        }
+        return dp[n-1][sum/2];
+    }
+};
