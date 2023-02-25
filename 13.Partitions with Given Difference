@@ -1,0 +1,44 @@
+Given an array arr, partition it into two subsets(possibly empty) such that their union is the original array. Let the sum of the element of these two subsets be S1 and S2. 
+
+Given a difference d, count the number of partitions in which S1 is greater than or equal to S2 and the difference S1 and S2 is equal to d. since the answer may be large return it modulo 109 + 7.
+
+Example 1:
+
+Input:
+n = 4, d = 3
+arr[] =  { 5, 2, 6, 4}
+Output:
+1
+Explanation:
+There is only one possible partition of this array. Partition : {6, 4}, {5, 2}. The subset difference between subset sum is: (6 + 4) - (5 + 2) = 3.
+Example 2:
+
+Input:
+n = 4, d = 0
+arr[] = {1, 1, 1, 1}
+Output:
+6 
+code:-
+ int f(int n,int target,vector<int>&arr){
+      if(n==0){
+         if(arr[0]==0 && target==0){
+             return 2;
+         }
+         if(target==0 || arr[0]==target){
+             return 1;
+         }
+         return 0;
+     }
+      int t = 0;
+      if(target-arr[n]>=0){
+          t = f(n-1,target-arr[n],arr);
+      }
+      int nt = f(n-1,target,arr);
+      
+      return t+nt;
+  }
+    int countPartitions(int n, int d, vector<int>& arr) {
+        int sum = accumulate(arr.begin(),arr.end(),0);
+        int  target = (sum-d)/2;
+        return f(n-1,target,arr);
+    }
