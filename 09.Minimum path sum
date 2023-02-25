@@ -1,0 +1,54 @@
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
+
+Note: You can only move either down or right at any point in time.
+
+ 
+
+Example 1:
+
+Input: grid = [[1,3,1],[1,5,1],[4,2,1]]
+Output: 7
+Explanation: Because the path 1 → 3 → 1 → 1 → 1 minimizes the sum.
+Example 2:
+
+Input: grid = [[1,2,3],[4,5,6]]
+Output: 12
+Approach:-bit similar to unique path but when it crosses the boundary we have to return maximum value soo that we cannot cosider that path in
+our solution as we are also return minimum path sum
+code:-
+  int dp[205][205];
+     int f(int n,int m,vector<vector<int>>&grid){
+        if(n==0 && m==0) return grid[0][0];
+
+        if(n<0 || m<0) return 1e8;
+
+        if(dp[n][m]!=-1) return dp[n][m];
+
+        int left = grid[n][m]+ f(n,m-1,grid);
+        int right = grid[n][m]+ f(n-1,m,grid);
+
+        return dp[n][m] = min(left,right);
+    }
+    int minPathSum(vector<vector<int>>& grid) {
+       int n=grid.size();
+       int m=grid[0].size();
+    //    memset(dp,-1,sizeof(dp));
+     //    return f(n-1,m-1,grid); 
+      dp[0][0]=grid[0][0];
+      for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(i==0 && j==0){
+                dp[i][j]=grid[i][j];
+            }
+            else{
+                int left=0,up=0;
+                if(i>0) left = grid[i][j]+dp[i-1][j];
+                else left = 1e9;
+                if(j>0) up = grid[i][j]+dp[i][j-1];
+                else up = 1e9;
+                dp[i][j] = min(up,left);
+            }
+        }
+    }
+    return dp[n-1][m-1];
+  }
