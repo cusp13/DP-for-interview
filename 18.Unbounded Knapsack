@@ -1,0 +1,30 @@
+Given a set of N items, each with a weight and a value, represented by the array w[] and val[] respectively.
+Also, a knapsack with weight limit W.
+The task is to fill the knapsack in such a way that we can get the maximum profit. Return the maximum profit.
+Note: Each item can be taken any number of times.
+
+// User function Template for C++
+code:-
+class Solution{
+public:
+int f(int ind, int W, int val[], int wt[],vector<vector<int>>&dp){
+    if(ind==0){
+        int ans = W/wt[0];
+        return (ans*val[0]);
+    }
+    if(dp[ind][W]!=-1){
+        return dp[ind][W];
+    }
+    int npick = f(ind-1,W,val,wt,dp);
+    int pick=0;
+    if(W-wt[ind]>=0)
+        pick = val[ind]+f(ind,W-wt[ind],val,wt,dp);
+    
+    return dp[ind][W] = max(npick,pick);
+}
+    int knapSack(int N, int W, int val[], int wt[])
+    {
+        vector<vector<int>>dp(N+1,vector<int>(W+1,-1));
+        return f(N-1,W,val,wt,dp);
+    }
+};
