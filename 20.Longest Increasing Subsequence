@@ -1,0 +1,42 @@
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+
+code:-
+class Solution {
+public:
+int f(int ind,int n,vector<int>&nums,int prev,vector<vector<int>>&dp){
+    if(ind==n){
+        return 0;
+    }
+    if(dp[ind][prev+1] != -1){
+        return dp[ind][prev+1];
+    }
+    int nottake = 0+f(ind+1,n,nums,prev,dp);
+    int take=0;
+    if(prev==-1 || nums[prev]<nums[ind]){
+        take = 1 + f(ind+1,n,nums,ind,dp);
+    }
+    return dp[ind][prev+1] = max(take,nottake);
+}
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        int prev = -1;
+        // return f(0,n,nums,prev,dp);
+        vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+        for(int ind = n-1;ind>=0;ind--){
+            for(int prev = n-1;prev>=-1;prev--){
+                int len = 0 + dp[ind+1][prev+1];
+                if(prev==-1||nums[ind]>nums[prev]){
+                    len=max(len,1+dp[ind+1][ind+1]);
+                }
+            dp[ind][prev+1]=len;
+            }
+        }
+        return dp[0][0];
+    }
+};
