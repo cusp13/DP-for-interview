@@ -1,0 +1,45 @@
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+//code:-
+int dp[20][10005];
+    int f(vector<int>&coin,int x,int n){
+        if(n==0){
+            if(x%coin[0]==0){
+                return x/coin[0];
+            }
+            else
+            return 1e9;
+        }
+        if(dp[n][x]!=-1){
+            return dp[n][x];
+        }
+        int take=1e9,ntake;
+        if(x-coin[n]>=0){
+            take = 1+f(coin,x-coin[n],n);
+        }
+        ntake=f(coin,x,n-1);
+
+        return  dp[n][x]=min(take,ntake);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        memset(dp,-1,sizeof(dp));
+        if(n==1){
+            if(amount%coins[0]==0){
+                return amount/coins[0];
+            }
+            else{
+                return -1;
+            }
+        }
+       int ans = f(coins,amount,n-1);
+       if(ans==1e9){
+           return -1;
+       }
+       return ans;
+    }
+};
